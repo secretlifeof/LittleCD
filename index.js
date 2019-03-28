@@ -11,7 +11,6 @@ const githubUsername = 'secretlifeof';
 
 const getCDFile = async req => {
   const repository = req && req.body && req.body.repository;
-  console.log('repository: ', repository);
   const repName = repository && repository.full_name;
   console.log('repName: ', repName);
 
