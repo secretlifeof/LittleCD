@@ -36,14 +36,14 @@ const executeShellCommands = commandList => {
 
 app.use(bodyParser.json());
 
-app.get('/webhooks/github', async (req, res) => {
+app.post('/webhooks/github', async (req, res) => {
   const sender = req && req.body && req.body.sender;
   const branch = req && req.body && req.body.ref;
   const wantedBranch = 'master';
 
-  const yaml = await getCDFile(req);
-  const shellCommands = yaml.pipeline.commands;
-  executeShellCommands(shellCommands);
+  // const yaml = await getCDFile(req);
+  // const shellCommands = yaml.pipeline.commands;
+  // executeShellCommands(shellCommands);
 
   if (branch.includes(wantedBranch) && sender.login === githubUsername) {
     const yaml = await getCDFile(req);
