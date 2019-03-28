@@ -31,7 +31,10 @@ const executeShellCommands = commandList => {
   });
 };
 
+app.use(bodyparser.json());
+
 app.post('/webhooks/github', async (req, res) => {
+  console.log('res: ', res);
   console.log('req: ', req.body);
   const sender = req && req.body && req.body.sender;
   console.log('sender: ', sender);
@@ -44,7 +47,6 @@ app.post('/webhooks/github', async (req, res) => {
   if (branch.includes(wantedBranch) && sender.login === githubUsername) {
     const yaml = await getCDFile(req);
     const shellCommands = yaml.pipeline.commands;
-
     executeShellCommands(shellCommands);
   }
 });
