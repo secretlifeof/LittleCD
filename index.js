@@ -32,6 +32,7 @@ const executeShellCommands = commandList => {
 };
 
 app.post('/webhooks/github', async (req, res) => {
+  console.log('req: ', req);
   const sender = req && req.body && req.body.sender;
   console.log('sender: ', sender);
   const branch = req && req.body && req.body.ref;
