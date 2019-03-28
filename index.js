@@ -11,7 +11,9 @@ const githubUsername = 'secretlifeof';
 
 const getCDFile = async req => {
   const repository = req && req.body && req.body.repository;
+  console.log('repository: ', repository);
   const repName = repository && repository.full_name;
+  console.log('repName: ', repName);
 
   const CDFile = await curl
     .setHeaders([
@@ -35,12 +37,8 @@ const executeShellCommands = commandList => {
 app.use(bodyParser.json());
 
 app.post('/webhooks/github', async (req, res) => {
-  console.log('res: ', res);
-  console.log('req: ', req.body);
   const sender = req && req.body && req.body.sender;
-  console.log('sender: ', sender);
   const branch = req && req.body && req.body.ref;
-  console.log('branch: ', branch);
   const wantedBranch = 'master';
 
   // res.send(await getCDFile(req));
