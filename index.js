@@ -16,7 +16,7 @@ const getCDFile = async req => {
 
   const CDFile = await curl
     .setHeaders([
-      'Authorization: token cac68f8634993293941b98a82bf653dbbccb57e4',
+      'Authorization: token 54a6939d4e7812944bf7796768550d7b7b76c7bd',
       'Accept: application/vnd.github.v3.raw',
       'User-Agent: secretlifeof'
     ])
@@ -40,7 +40,9 @@ app.post('/webhooks/github', async (req, res) => {
   const branch = req && req.body && req.body.ref;
   const wantedBranch = 'master';
 
-  // res.send(await getCDFile(req));
+  // const yaml = await getCDFile(req);
+  // const shellCommands = yaml.pipeline.commands;
+  // executeShellCommands(shellCommands);
 
   if (branch.includes(wantedBranch) && sender.login === githubUsername) {
     const yaml = await getCDFile(req);
