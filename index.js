@@ -1,13 +1,14 @@
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
+require('dotenv').config();
 var childProcess = require('child_process');
 var shell = require('shelljs');
 const curl = new (require('curl-request'))();
 yaml = require('js-yaml');
 
-const port = 8080;
-const githubUsername = 'secretlifeof';
+const port = process.env.PORT || 8080;
+const githubUsername = process.env.GITHUB_USERNAME || 'secretlifeof';
 
 const getCDFile = async req => {
   const repository = req && req.body && req.body.repository;
@@ -16,7 +17,7 @@ const getCDFile = async req => {
 
   const CDFile = await curl
     .setHeaders([
-      'Authorization: token 54a6939d4e7812944bf7796768550d7b7b76c7bd',
+      `Authorization: token ${process.env.ACCESS_TOKEN}`,
       'Accept: application/vnd.github.v3.raw',
       'User-Agent: secretlifeof'
     ])
@@ -35,14 +36,14 @@ const executeShellCommands = commandList => {
 
 app.use(bodyParser.json());
 
-app.post('/webhooks/github', async (req, res) => {
+app.get('/webhooks/github', async (req, res) => {
   const sender = req && req.body && req.body.sender;
   const branch = req && req.body && req.body.ref;
   const wantedBranch = 'master';
 
-  // const yaml = await getCDFile(req);
-  // const shellCommands = yaml.pipeline.commands;
-  // executeShellCommands(shellCommands);
+  const yaml = await getCDFile(req);
+  const shellCommands = yaml.pipeline.commands;
+  executeShellCommands(shellCommands);
 
   if (branch.includes(wantedBranch) && sender.login === githubUsername) {
     const yaml = await getCDFile(req);
