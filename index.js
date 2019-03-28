@@ -31,7 +31,7 @@ const executeShellCommands = commandList => {
   });
 };
 
-app.get('/webhooks/github', async (req, res) => {
+app.post('/webhooks/github', async (req, res) => {
   console.log('req: ', req);
   const sender = (req && req.body && req.body.sender) || 'githubUsername';
   const branch = (req && req.body && req.body.ref) || 'master';
