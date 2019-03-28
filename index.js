@@ -21,7 +21,7 @@ const getCDFile = async req => {
       'Accept: application/vnd.github.v3.raw',
       'User-Agent: secretlifeof'
     ])
-    .get(`https://api.github.com/repos/${repName}/contents/LittleCD.yaml`);
+    .get(`https://api.github.com/repos/secretlifeof/teuberkohlhoff/contents/LittleCD.yaml`);
   const fileToObject = yaml.safeLoad(CDFile.body);
   console.log('fileToObject: ', fileToObject);
 
