@@ -7,7 +7,7 @@ var shell = require('shelljs');
 const curl = new (require('curl-request'))();
 yaml = require('js-yaml');
 
-const port = process.env.PORT || 8080;
+const port = process.env.CD_PORT || 8080;
 const githubUsername = process.env.GITHUB_USERNAME || 'secretlifeof';
 
 const getCDFile = async req => {
@@ -41,10 +41,6 @@ app.post('/webhooks/github', async (req, res) => {
   const branch = req && req.body && req.body.ref;
   const wantedBranch = 'master';
 
-  // const yaml = await getCDFile(req);
-  // const shellCommands = yaml.pipeline.commands;
-  // executeShellCommands(shellCommands);
-
   if (branch.includes(wantedBranch) && sender.login === githubUsername) {
     const yaml = await getCDFile(req);
     const shellCommands = yaml.pipeline.commands;
@@ -53,15 +49,5 @@ app.post('/webhooks/github', async (req, res) => {
 });
 
 app.get('/', (req, res) => res.send('Hello LittleCD!'));
-
-// const deploy = res => {
-//   childProcess.exec('./deploy.sh', (err, stdout, stderr) => {
-//     if (err) {
-//       console.error(err);
-//       return res.sendStatus(500);
-//     }
-//     res.send(200);
-//   });
-// };
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
