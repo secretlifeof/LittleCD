@@ -32,7 +32,7 @@ const executeShellCommands = commandList => {
   });
 };
 
-app.use(bodyparser.json());
+app.use(bodyParser.json());
 
 app.post('/webhooks/github', async (req, res) => {
   console.log('res: ', res);
