@@ -20,6 +20,7 @@ const getCDFile = async req => {
     ])
     .get(`https://api.github.com/repos/${repName}/contents/LittleCD.yaml`);
   const fileToObject = yaml.safeLoad(CDFile.body);
+  console.log('fileToObject: ', fileToObject);
 
   return fileToObject;
 };
@@ -30,7 +31,8 @@ const executeShellCommands = commandList => {
   });
 };
 
-app.post('/webhooks/github', async (req, res) => {
+app.get('/webhooks/github', async (req, res) => {
+  console.log('req: ', req);
   const sender = (req && req.body && req.body.sender) || 'githubUsername';
   const branch = (req && req.body && req.body.ref) || 'master';
   const wantedBranch = 'master';
