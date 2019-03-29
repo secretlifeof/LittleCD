@@ -26,7 +26,7 @@ const getCDFile = async req => {
   return fileToObject;
 };
 
-const executeShellCommands = commandList => {
+const executeShellCommands = commandList => { 
   commandList.forEach(command => {
     shell.exec(command);
   });
