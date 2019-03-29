@@ -13,6 +13,7 @@ const githubUsername = process.env.GITHUB_USERNAME || 'secretlifeof';
 const getCDFile = async req => {
   const repository = req && req.body && req.body.repository;
   const repName = repository && repository.full_name;
+  console.log('repName: ', repName);
 
   const CDFile = await curl
     .setHeaders([
@@ -22,7 +23,6 @@ const getCDFile = async req => {
     ])
     .get(`https://api.github.com/repos/${repName}/contents/LittleCD.yaml`);
   const fileToObject = yaml.safeLoad(CDFile.body);
-  console.log('fileToObject: ', fileToObject);
 
   return fileToObject;
 };
@@ -39,9 +39,12 @@ app.post('/webhooks/github', async (req, res) => {
   const sender = req && req.body && req.body.sender;
   const branch = req && req.body && req.body.ref;
   const wantedBranch = 'master';
+  const repository = req && req.body && req.body.repository;
+  const repName = repository && repository.full_name;
 
   if (branch.includes(wantedBranch) && sender.login === githubUsername) {
     const yaml = await getCDFile(req);
+    shell.exec(`git -C /srv/www/teuberkohlhoff/ pull https://${process.env.ACCESS_TOKEN}@github.com/${repName}`);
     const shellCommands = yaml.pipeline.commands;
     executeShellCommands(shellCommands);
   }
