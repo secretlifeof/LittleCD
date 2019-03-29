@@ -2,7 +2,7 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 require('dotenv').config();
-var childProcess = require('child_process');
+// var childProcess = require('child_process');
 var shell = require('shelljs');
 const curl = new (require('curl-request'))();
 yaml = require('js-yaml');
@@ -13,7 +13,6 @@ const githubUsername = process.env.GITHUB_USERNAME || 'secretlifeof';
 const getCDFile = async req => {
   const repository = req && req.body && req.body.repository;
   const repName = repository && repository.full_name;
-  console.log('repName: ', repName);
 
   const CDFile = await curl
     .setHeaders([
@@ -45,8 +44,8 @@ app.post('/webhooks/github', async (req, res) => {
   if (branch.includes(wantedBranch) && sender.login === githubUsername) {
     const yaml = await getCDFile(req);
     shell.exec(`git -C /srv/www/teuberkohlhoff/ pull https://${process.env.ACCESS_TOKEN}@github.com/${repName}`);
-    const shellCommands = yaml.pipeline.commands;
-    executeShellCommands(shellCommands);
+    const shellCommands = yaml && yaml.pipeline.commands;
+    shellCommands && executeShellCommands(shellCommands);
   }
 });
 
