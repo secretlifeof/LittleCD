@@ -13,7 +13,6 @@ const githubUsername = process.env.GITHUB_USERNAME || 'secretlifeof';
 const getCDFile = async req => {
   const repository = req && req.body && req.body.repository;
   const repName = repository && repository.full_name;
-  console.log('repName: ', repName);
 
   const CDFile = await curl
     .setHeaders([
@@ -21,7 +20,7 @@ const getCDFile = async req => {
       'Accept: application/vnd.github.v3.raw',
       'User-Agent: secretlifeof'
     ])
-    .get(`https://api.github.com/repos/secretlifeof/teuberkohlhoff/contents/LittleCD.yaml`);
+    .get(`https://api.github.com/repos/${repName}/contents/LittleCD.yaml`);
   const fileToObject = yaml.safeLoad(CDFile.body);
   console.log('fileToObject: ', fileToObject);
 
